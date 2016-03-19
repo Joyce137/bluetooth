@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.administrator.ustc_health">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.DesignDemo">
+        <meta-data
+            android:name="com.example.administrator.ustc_health"
+            android:value="LGXaCxt7OVhanvZuXiIRoD1i" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.administrator.ble.ScanBleFailedActivity"
+            android:theme="@style/Theme.ScanDemo"></activity>
+        <activity
+            android:name="com.example.administrator.ble.ScanBleActivity"
+            android:theme="@style/Theme.ScanDemo"></activity>
+        <activity
+            android:name="com.example.administrator.ble.DeviceListActivity"
+            android:theme="@style/Theme.Device"></activity>
+        <activity
+            android:name="com.example.administrator.friends.FriendsDetailActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+            >
+        </activity>
+        <activity
+            android:name="com.example.administrator.register.RegisterActivity"
+            android:parentActivityName="com.example.administrator.login.LoginActivity"
+            android:theme="@style/Theme.Login">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.administrator.login.LoginActivity" />
+
+        </activity>
+        <activity
+            android:name="com.example.administrator.register.RegisterActivityFin"
+            android:parentActivityName="com.example.administrator.register.RegisterActivityPh"
+            android:theme="@style/Theme.Login">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.administrator.register.RegisterActivityPh" />
+        </activity>
+        <activity
+            android:name="com.example.administrator.register.RegisterActivityPh"
+            android:parentActivityName="com.example.administrator.register.RegisterActivity"
+            android:theme="@style/Theme.Login">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.administrator.register.RegisterActivity" />
+        </activity>
+        <activity
+            android:name="com.example.administrator.login.LoginActivity"
+            android:theme="@style/Theme.Login"
+            android:windowSoftInputMode="stateVisible|adjustResize|stateAlwaysHidden"></activity>
+        <activity
+            android:name="com.example.administrator.set.SetActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Set">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.administrator.set.ProFileActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.ProFile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.administrator.set.MyProFileActivity"
+            android:parentActivityName="com.example.administrator.set.ProFileActivity"
+            android:theme="@style/Theme.MyProFile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.administrator.set.ProFileActivity" />
+        </activity>
+
+        <activity android:name="com.example.administrator.baidumap.MapActivity"></activity>
+        <service android:name="com.example.administrator.ble.BluetoothLeService"></service>
+        <service android:name="com.example.administrator.ble.DeviceControlService"></service>
+        <receiver android:name=".MainActivity$MyBroadcastReceiver01">
+            <intent-filter>
+                <action android:name="com.example.administrator.ble.MY_BROADCAST01" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".MainActivity$MyBroadcastReceiver02">
+            <intent-filter>
+                <action android:name="com.example.administrator.ble.MY_BROADCAST02" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+</manifest>
