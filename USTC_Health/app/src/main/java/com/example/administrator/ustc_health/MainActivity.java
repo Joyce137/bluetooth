@@ -43,6 +43,7 @@ import com.example.administrator.set.ProFileActivity;
 import com.example.administrator.set.SetActivity;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,12 +67,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Context context;
 
+    //睡眠模式
+    public  static boolean isSleepBMode = false;
+
     private final static String TAG = MainActivity.class
             .getSimpleName();
     byte[] scan;
     public static String mDeviceName;
     public static String mDeviceAddress;
-private static   String mydate;
+    private static   String mydate;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     //BLe控制服务
@@ -81,7 +85,7 @@ private static   String mydate;
     private static final int REQUEST_ENABLE_BT = 1;
 
     public static String str01 = "0", str02 = "0";
-private static int count;
+    private static int count;
     private static TextView tv_toolbar_state;
     CircleImageView myImage;
     static ImageView iv_toolbar_refresh;
@@ -166,6 +170,8 @@ private static int count;
                 mDeviceAddress = device_name;
             }
         }
+
+
     }
 
     //检查程序是否为第一次运行
@@ -433,6 +439,10 @@ private static int count;
             //  Toast.makeText(context, "已经连接到设备", Toast.LENGTH_SHORT).show();
             tv_toolbar_state.setText("已连接");
             checkfirstrunaday();
+
+//            //检查当前是否为睡眠模式
+//            DeviceControlService.mBluetoothLeService.readMessage(UUID.fromString(SampleGattAttributes.HEARTRATEPERIODRW));//
+
             iv_toolbar_refresh.setVisibility(View.GONE);
         }
 
@@ -544,7 +554,17 @@ private final BroadcastReceiver mGattUpdateReceiver01 = new BroadcastReceiver() 
                        }
                 }
 
-            }
+                else if (intent.getStringExtra("DataType").equals("CollectPeriod")) {
+                    int mode = SampleGattAttributes.dataGetter(intent.getByteArrayExtra("data"), 0, 2);
+                    if(mode == 480){
+                        MainActivity.isSleepBMode = true;
+                    }
+                    if(mode == 12){
+                        MainActivity.isSleepBMode = false;
+                    }
+                }
+
+        }
         }
 
 };

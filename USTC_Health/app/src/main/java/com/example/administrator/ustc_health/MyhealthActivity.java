@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.administrator.database.DBManager;
+import com.example.administrator.repo.SleepMode;
 import com.example.administrator.viewfrag.DayAmountFragActivity;
 import com.example.administrator.viewfrag.DayHeartFragActivity;
 import com.example.administrator.viewfrag.DayKcalFragActivity;
@@ -81,9 +83,11 @@ public class MyhealthActivity extends Fragment {
         getActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        dbManager = DBManager.getInstance(getContext());
-        dbManager.openDatabase();
-        dbManager.queryNewBleData();
+//        dbManager = DBManager.getInstance(getContext());
+//        dbManager.openDatabase();
+//        dbManager.queryNewBleData();
+        //查询新的ble数据
+
 
         mapButton = (Button) view.findViewById(R.id.bt_myhealth_map);
 

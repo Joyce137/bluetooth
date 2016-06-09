@@ -1,6 +1,7 @@
 package com.example.administrator.ustc_health;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,12 +18,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.administrator.ble.BluetoothLeService;
+import com.example.administrator.ble.DeviceControlService;
 import com.example.administrator.ble.SampleGattAttributes;
 import com.example.administrator.database.DBManager;
+import com.example.administrator.database.Utils;
+import com.example.administrator.database.entity.HeartRateData;
+import com.example.administrator.database.impl.BleDataDaoImpl;
+import com.example.administrator.database.impl.HeartRataDataDaoImpl;
 import com.example.administrator.utils.ComFormu;
 import com.example.administrator.utils.DataToData;
 
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 /**
  * Created by Administrator on 2015/10/22.
@@ -42,6 +49,8 @@ public class DayInforFragment extends Fragment implements View.OnClickListener {
     ImageView imageView;
     //数据库
     DBManager dbManager;
+    BleDataDaoImpl bleDataDao;
+
     private final static String TAG = DayInforFragment.class
             .getSimpleName();
 
@@ -55,8 +64,13 @@ public class DayInforFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.activity_myinfor, container, false);
         getActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         //打开数据库
-        dbManager = DBManager.getInstance(getContext());
-        dbManager.openDatabase();
+//        dbManager = DBManager.getInstance(getContext());
+//        dbManager.openDatabase();
+
+        bleDataDao = new BleDataDaoImpl(getActivity().getApplicationContext(),"abc");
+//        bleDataDao.insertBleData("123","13.34","80.445","0");
+        bleDataDao.saveBleDataToFile(bleDataDao.queryBleData());
+
        // dbManager.queryNewBleData();
         ly_heartrate = (LinearLayout) view.findViewById(R.id.ly_myinfo_heartrate);
         ly_stepnum = (LinearLayout) view.findViewById(R.id.ly_myinfo_stepnum);
@@ -132,17 +146,24 @@ public class DayInforFragment extends Fragment implements View.OnClickListener {
                 textView_01.setText(str01);
                 textView_02.setText(str02);
                 textView_03.setText(str03);
-                dbManager.insertBleData(Integer.valueOf(str02), Integer.valueOf(str01), DataToData.getCurrentTime());
+//                dbManager.insertBleData(Integer.valueOf(str02), Integer.valueOf(str01), DataToData.getCurrentTime());
+                bleDataDao.insertBleData(str02, str01, str03, "0");
                 Log.d(TAG, "insert success!");
-                dbManager.query();
+//                dbManager.query();
                 Log.d(TAG, "query success!");
 
-               Intent sendint;
+                Intent sendint;
                 switch (gengxin)
                 {
                     case 1:
                         sendint=new Intent(MyhealthActivity.ACTION_VIEW_HEART);
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(sendint);
+                        //睡眠模式
+                        if(MainActivity.isSleepBMode == true)
+                        {
+                            HeartRataDataDaoImpl rateDao = new HeartRataDataDaoImpl(getActivity().getApplicationContext());
+                            rateDao.insertHeartRataData(str01);
+                        }
                         break;
                     case 2:
                         sendint=new Intent(MyhealthActivity.ACTION_VIEW_STEP);
@@ -169,7 +190,13 @@ public class DayInforFragment extends Fragment implements View.OnClickListener {
                     Log.d(TAG,"hhhhhhhhhh"+ SampleGattAttributes.dataDivider(sevenData,1,10));
                     Log.d(TAG,"hhhhhhhhhh"+SampleGattAttributes.dataDivider(sevenData,1,8));
                 } else if (intent.getStringExtra("DataType").equals("CollectPeriod")) {
-
+                    int mode = SampleGattAttributes.dataGetter(intent.getByteArrayExtra("data"), 0, 2);
+                    if(mode == 480){
+                        MainActivity.isSleepBMode = true;
+                    }
+                    if(mode == 12){
+                        MainActivity.isSleepBMode = false;
+                    }
                 } else if (intent.getStringExtra("DataType").equals("Power")) {
                    /* MainActivity.str01 = SampleGattAttributes.dataGetter(intent.getByteArrayExtra("data"), 0, 1)+"%";
                     textView_01.setText( MainActivity.str01 );*/
